@@ -5,7 +5,7 @@ const app = express();
 
 const api = new ParseServer({
   databaseURI: 'mongodb://localhost:27017/dev', // Connection string for your MongoDB database
-  cloud: './cloud/main.js', // Path to your Cloud Code
+  // cloud: './cloud/main.js', // Path to your Cloud Code
   appId: 'myAppId',
   masterKey: 'myMasterKey', // Keep this key secret!
   fileKey: 'optionalFileKey',
@@ -16,15 +16,13 @@ const api = new ParseServer({
 app.use('/parse', api);
 
 const dashboard = new ParseDashboard({
-  "apps": [
-    {
+  "apps": [{
       "serverURL": "http://localhost:1337/parse",
       "appId": "myAppId",
       "masterKey": "myMasterKey",
       "appName": "MyApp"
-    }
-  ]
-});
+    }]
+}, {allowInsecureHTTP: false});
 
 // make the Parse Dashboard available at /dashboard
 app.use('/dashboard', dashboard);
