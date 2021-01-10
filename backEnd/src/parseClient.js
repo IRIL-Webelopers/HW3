@@ -55,14 +55,21 @@ app.post('/api/signup', async (req, res) => {
         else{
             let user = new Parse.User()
             user.set("username", req.body.email)
-        
             user.set("email", req.body.email)
             user.set("password", req.body.password)
             console.log(user.get('email'))
-            user.save()
-            res.status(201)
-            res.json({"message": "user has been created."})
-            console.log("user created")
+            try{
+                await user.signUp()
+                res.status(201)
+                res.json({"message": "user has been created."})
+                console.log("user created")
+            }
+            catch(error){
+                res.status(500)
+                res.json({"message": "Sorry, something got F'ed up realy bad!"})
+                console.log("something got F'ed up")
+                console.log("Error: " + err.code + " " + err.message);
+            }
         }
     }
     // else if (!(req.body.username && req.body.password)){
@@ -70,6 +77,37 @@ app.post('/api/signup', async (req, res) => {
     //     res.json({"message": "Request Length should be 2"})
     //     console.log("invalid parameter or number of parameters")
     // }
+})
+
+app.get("/api/signin", (req, res) => {
+    res.status(405)
+    res.json({"message": "Only `Post` Method is Valid"})
+    console.log("user used Invalid method to login")
+})
+
+app.post("/api/signin", async (req, res) => {
+    if(!(Object.keys(req.body).length === 2 && req.body.email && req.body.password)){
+        res.status(400)
+        res.json({"message": "Request Length should be 2 with `email` and `password` parameters"})
+        console.log("Invalid number of params")
+    }
+    else if(!validateEmail(req.body.email)){
+        res.status(400)
+        res.json({"message": "filed `email` is not valid"})
+        console.log("invalid email")
+    }
+    else{
+        let user = await Parse.User.logIn(req.body.email, req.body.password).then((usr) =>{
+            res.status(200)
+            res.json({"token": usr.get("sessionToken")})
+            console.log(`SUCCESSFUL login with user: ${usr.get("email")}`)
+        }).catch((err) =>{
+            res.status(401)
+            res.json({"message": "invalid username or password!"})
+            console.log(`UNSUCCESSFUL login with user: ${req.body.email}`)
+            console.log("Error: " + err.code + " " + err.message);
+        })
+    }
 })
 
 app.listen(port, () => {
