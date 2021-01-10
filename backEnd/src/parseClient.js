@@ -118,7 +118,7 @@ app.put('/api/admin/post/crud', async (req, res) => {
     try {
         //todo kasra -> get user id
 
-        
+
     } catch (err) {console.log(err.message)}
 })
 
@@ -249,3 +249,35 @@ app.get('/api/admin/user/crud', async (req, res) => {
     }
     }catch(err) {console.log(err.message)}
 })
+
+/* AmirHossein */
+
+app.post('/api/admin/post/create', async (req, res) => {
+    if (checkRequestLength(req, res, 2)) {
+        res.status(400)
+        res.json({"message": "Request Length should be 2"})
+        console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
+    } else if (checkPostValidation(req, res)) {
+        res.status(400)
+        res.json({"message": "filed `title` is not valid"})
+        console.log("Create Post Error: filed `title` is not valid")
+    } else {
+        let Post = Parse.Object.extend('Post')
+        let post = new Post()
+        post.set('title', req.body.title)
+        post.set('age', 20)
+        console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
+        await post.save()
+        res.json({"id": post.id})
+    }
+})
+
+function checkRequestLength(req, res, length) {
+    return !(Object.keys(req.body).length === length);
+
+}
+
+function checkPostValidation(req) {
+    return !req.body.title || !req.body.content;
+
+}
