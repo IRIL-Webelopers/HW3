@@ -113,3 +113,139 @@ app.post("/api/signin", async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
+
+app.put('/api/admin/post/crud', async (req, res) => {
+    try {
+        //todo kasra -> get user id
+
+        
+    } catch (err) {console.log(err.message)}
+})
+
+app.delete('/admin/post/crud', async (req, res) => {
+    //check if 204 is sent
+    try {
+        //todo kasra -> get user id
+        let userid = 'ER11UgrFgp'
+
+        if(req.query.id === undefined){
+            res.status(400)
+            res.json({"message": "url id is not valid"})
+            console.log("Invalid url for post delete")
+        } else {
+            let Post = Parse.Object.extend("Post")
+            let postQuery = new Parse.Query(Post)
+            postQuery.equalTo("objectId", req.query.id)
+            let result = await postQuery.first()
+            if(result === undefined){
+                res.status(400)
+                res.json({"message": "url id is not valid"})
+                console.log("Invalid url id for post delete")
+            } else if(result.get('createdBy').id !== userid){
+                res.status(401)
+                res.json({"message": "permission denied."})
+                console.log("permission denied for post delete")
+            } else{
+                await result.destroy()
+                res.status(204)
+                console.log("post delete successful")
+            }
+        }
+    }catch (err) {console.log(err.message)}
+})
+
+app.get('/api/admin/post/crud', async (req, res) => {
+    try {
+    //todo kasra -> get user id
+    let userid = 'ER11UgrFgp'
+
+    if(Object.keys(req.query).length !== 0){
+        if(req.query.id === undefined){
+            res.status(400)
+            res.json({"message": "url id is not valid"})
+            console.log("Invalid url for post read")
+        } else{
+            let Post = Parse.Object.extend("Post")
+            let postQuery = new Parse.Query(Post)
+            postQuery.equalTo("objectId", req.query.id)
+            let result = await postQuery.first()
+            if(result === undefined) {
+                es.status(400)
+                res.json({"message": "url id is not valid"})
+                console.log("Invalid url id for post read")
+            }else{
+                res.status(200)
+                res.json({
+                      "post": {
+                        "id": result.id,
+                        "title": result.get('title'),
+                        "content": result.get('content'),
+                        "created_by": result.get('createdBy').id,
+                        "created_at": result.createdAt
+                      }
+                })
+                console.log("post read successful")
+            }
+        }
+    }else{
+        let Post = Parse.Object.extend("Post")
+        let postQuery = new Parse.Query(Post)
+        postQuery.equalTo('createdBy', userid)
+        let posts = await postQuery.find()
+        let result = []
+        for(let i = 0; i < posts.length; i++){
+            result.push({
+                "id": posts[i].id,
+                "title": posts[i].get('title'),
+                "content": posts[i].get('content'),
+                "created_by": posts[i].get('createdBy').id,
+                "created_at": posts[i].createdAt
+            })
+        }
+        res.status(200)
+        res.json({
+            "posts": result
+        })
+        console.log("post read successful")
+    }
+    }catch (err) {console.log(err.message)}
+})
+
+app.get('/api/admin/user/crud', async (req, res) => {
+    //get email is not working properly
+    try{
+    //todo kasra -> get user id
+    let userid = 'ER11UgrFgp'
+
+    if(req.query.id === undefined) {
+        res.status(400)
+        res.json({"message": "url id is not valid"})
+        console.log("Invalid url for user read")
+    } else if(req.query.id !== userid) {
+        res.status(401)
+        res.json({"message": "permission denied."})
+        console.log("permission denied for user read")
+    } else {
+        let User = Parse.Object.extend("User")
+        let userQuery = new Parse.Query(User)
+        userQuery.equalTo("objectId", req.query.id)
+        let result = await userQuery.first()
+        if(result === undefined) {
+            es.status(400)
+            res.json({"message": "url id is not valid"})
+            console.log("Invalid url id for user read")
+        } else {
+            res.status(200)
+        res.json({
+            "user": {
+                "id": result.id,
+                "email": result.get('email'),
+                "created_at": result.createdAt,
+                "username": result.get('username')
+              }
+        })
+        console.log("user read successful")
+        }
+    }
+    }catch(err) {console.log(err.message)}
+})
