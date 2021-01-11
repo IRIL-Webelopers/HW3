@@ -1,5 +1,6 @@
 const express = require('express')
 const Parse = require('parse/node')
+const cookieParser = require("cookie-parser");
 
 const app = express()
 const port = 3000
@@ -8,9 +9,11 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(cookieParser())
 
 Parse.initialize('myAppId')
 Parse.serverURL = 'http://localhost:1337/parse'
+Parse.User.enableUnsafeCurrentUser()
 
 // let Person = Parse.Object.extend('Person')
 
@@ -98,6 +101,7 @@ app.post("/api/signin", async (req, res) => {
     }
     else{
         let user = await Parse.User.logIn(req.body.email, req.body.password).then((usr) =>{
+            res.setHeader("Set-Cookie", `token=${usr.get("sessionToken")}; HttpOnly`)
             res.status(200)
             res.json({"token": usr.get("sessionToken")})
             console.log(`SUCCESSFUL login with user: ${usr.get("email")}`)
@@ -284,24 +288,44 @@ app.get('/api/admin/user/crud', async (req, res) => {
 
 /* AmirHossein */
 
-app.post('/api/admin/post/create', async (req, res) => {
-    if (checkRequestLength(req, res, 2)) {
-        res.status(400)
-        res.json({"message": "Request Length should be 2"})
-        console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
-    } else if (checkPostValidation(req, res)) {
-        res.status(400)
-        res.json({"message": "filed `title` is not valid"})
-        console.log("Create Post Error: filed `title` is not valid")
-    } else {
-        let Post = Parse.Object.extend('Post')
-        let post = new Post()
-        post.set('title', req.body.title)
-        post.set('content', req.body.content)
-        //todo post.set(creator, User)
-        console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
-        await post.save()
-        res.json({"id": post.id})
+app.post('/api/admin/post/crud', async (req, res) => {
+    if(!req.cookies.token){
+        res.status(401)
+        res.json({"message": "You should login first"})
+        console.log("No session token")
+    }
+    else{
+        let user = await Parse.User.become(req.cookies.token).then(async usr => {
+            if (checkRequestLength(req, res, 2)) {
+                res.status(400)
+                res.json({"message": "Request Length should be 2"})
+                console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
+            } else if (checkPostValidation(req.body.title, req.body.content)) {
+                res.status(400)
+                res.json({"message": "filed `title` is not valid"})
+                console.log("Create Post Error: filed `title` is not valid")
+            } else {
+                let Post = Parse.Object.extend('Post')
+                let post = new Post()
+                post.set('title', req.body.title)
+                post.set('content', req.body.content)
+                let acl = new Parse.ACL(usr)
+                acl.setPublicReadAccess(true)
+                acl.setPublicWriteAccess(false)
+                // acl.setWriteAccess(usr)
+                post.setACL(acl)
+                console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
+                await post.save()
+                res.status(201)
+                res.json({"id": post.id, "creatorName": usr.get("username")})
+            }
+        }).catch((error) => {
+            res.status(401)
+            res.json({"message": "You should login first"})
+            console.log("Invalid session token")
+            console.log("Error: " + error.code + "[*]" + error.message);
+        })
+        // Parse.User.logOut()
     }
 })
 
@@ -310,8 +334,8 @@ function checkRequestLength(req, res, length) {
 
 }
 
-function checkPostValidation(req) {
-    return !req.body.title || !req.body.content;
+function checkPostValidation(title, content) {
+    return !title || !content;
 
 }
 
