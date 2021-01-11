@@ -117,8 +117,40 @@ app.listen(port, () => {
 app.put('/api/admin/post/crud', async (req, res) => {
     try {
         //todo kasra -> get user id
+        let userid = 'ER11UgrFgp'
 
-
+        if(!(Object.keys(req.body).length === 2 && req.body.title && req.body.content)){
+            res.status(400)
+            res.json({"message": "Request Length should be 2"})
+            console.log("Invalid number of params for post update")
+        }
+        else if(req.query.id === undefined ){
+            res.status(400)
+            res.json({"message": "url id is not valid"})
+            console.log("url id is not valid for post update")
+        } 
+        // else if(){} check title validation ??!!! how?
+        else{
+            let Post = Parse.Object.extend("Post")
+            let postQuery = new Parse.Query(Post)
+            postQuery.equalTo("objectId", req.query.id)
+            let result = await postQuery.first()
+            if(result === undefined){
+                res.status(400)
+                res.json({"message": "url id is not valid"})
+                console.log("url id is not valid for post update")
+            }else if(result.get("createdBy").id !== userid){
+                res.status(401)
+                res.json({"message": "permission denied."})
+                console.log("permission denied for post update")
+            }else{
+                result.set('title', req.body.title)
+                result.set('content', req.body.content)
+                await result.save()
+                res.status(204)
+                console.log("post update successful")
+            }
+        }
     } catch (err) {console.log(err.message)}
 })
 
