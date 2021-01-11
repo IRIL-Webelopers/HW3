@@ -265,7 +265,8 @@ app.post('/api/admin/post/create', async (req, res) => {
         let Post = Parse.Object.extend('Post')
         let post = new Post()
         post.set('title', req.body.title)
-        post.set('age', 20)
+        post.set('content', req.body.content)
+        //todo post.set(creator, User)
         console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
         await post.save()
         res.json({"id": post.id})
@@ -281,3 +282,21 @@ function checkPostValidation(req) {
     return !req.body.title || !req.body.content;
 
 }
+
+app.get('/api/post/', async (req, res) => {
+    let Post = Parse.Object.extend('Post')
+    let query = new Parse.Query(Post)
+    let posts = await query.find()
+    let postsArray = []
+    for (let i = 0; i < posts.length; i++) {
+        let post = {
+            "id": posts[i].id,
+            "title": posts[i].get('title'),
+            "content": posts[i].get('content'),
+            /* todo "created_by": posts[i].get('creator') */
+            "created_at": posts[i].createdAt
+        }
+        postsArray.push(post)
+    }
+    res.json({"posts": postsArray})
+})
