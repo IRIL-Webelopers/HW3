@@ -24,7 +24,7 @@ Parse.User.enableUnsafeCurrentUser()
 // person.save()
 
 var validateEmail = (email) => {
-    let re = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/
+    let re = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])$/
     return !!re.exec(email)
 }
 
@@ -132,7 +132,7 @@ app.put('/api/admin/post/crud', async (req, res) => {
             res.status(400)
             res.json({"message": "url id is not valid"})
             console.log("url id is not valid for post update")
-        } 
+        }
         // else if(){} check title validation ??!!! how?
         else{
             let Post = Parse.Object.extend("Post")
@@ -168,7 +168,7 @@ app.delete('/admin/post/crud/:id', async (req, res) => {
             console.log("No session token in post read")
         }
         else{
-            let user = await Parse.User.become(req.cookies.token).then((usr) => {
+            let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
                 if(usr.get("username") === "admin@gmail.com"){
                     let Post = Parse.Object.extend("Post")
                     let postQuery = new Parse.Query(Post)
@@ -212,7 +212,7 @@ app.get('/api/admin/post/crud/:id', async (req, res) => {
         console.log("No session token in post read")
     }
     else{
-        let user = await Parse.User.become(req.cookies.token).then((usr) => {
+        let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
             if(usr.get("username") === "admin@gmail.com"){
                 let Post = Parse.Object.extend("Post")
                 let postQuery = new Parse.Query(Post)
@@ -252,7 +252,7 @@ app.get('/api/admin/post/crud', async (req, res) => {
         console.log("No session token in post read")
     }
     else{
-        let user = await Parse.User.become(req.cookies.token).then((usr) => {
+        let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
             let Post = Parse.Object.extend("Post")
             let postQuery = new Parse.Query(Post)
             postQuery.equalTo('createdBy', userid)
