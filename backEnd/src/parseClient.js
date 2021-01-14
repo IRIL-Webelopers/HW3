@@ -388,5 +388,7 @@ app.get('/api/post/', async (req, res) => {
         }
         postsArray.push(post)
     }
+    res.status(200)
+    //todo handle exception
     res.json({"posts": postsArray})
 })
