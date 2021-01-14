@@ -3,25 +3,30 @@
 <link href="assets/styles/header.css" rel="stylesheet">
 
 <header>
-    <img src="./images/blue_logo_200x200.png" alt="WebDev Logo" class="header-logo-image">
-    <div class="ui secondary pointing menu">
-        <div class="right menu">
-            <a class="item" dideo-checked="true">
-                ثبت‌نام
-            </a>
+    <!-- desktop mode -->
+    <div class="desktop-mode">
+        <img alt="WebDev Logo" class="header-logo-image-desktop-mode" src="./images/blue_logo_200x200.png">
+        <div class="ui secondary pointing menu header-buttons">
+            <div class="right menu">
+                <a class="active item" dideo-checked="true">
+                    خانه
+                </a>
+                <a class="item" dideo-checked="true">
+                    برگزیده‌ها
+                </a>
+            </div>
             <a class="item" dideo-checked="true">
                 ورود
             </a>
+            <a class="item" dideo-checked="true">
+                ثبت‌نام
+            </a>
         </div>
-        <a class="active item" dideo-checked="true">
-            خانه
-        </a>
-        <a class="item" dideo-checked="true">
-            برترین‌ها
-        </a>
     </div>
-    <div class="ui segment">
-        <p style="text-align: center">به WebDev خوش‌آمدید.</p>
+
+    <!-- mobile mode -->
+    <div class="mobile-mode">
+        <img alt="WebDev Logo" class="header-logo-image-mobile-mode" src="./images/blue_logo_200x200.png">
     </div>
 </header>
 

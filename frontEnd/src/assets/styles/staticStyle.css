@@ -1,7 +1,3 @@
-:root {
-    --header-image-margin-right: 30px;
-}
-
 @font-face {
     font-family: Sahel;
     src: url('https://cdn.fontcdn.ir/Font/Persian/Sahel/Sahel.eot');
@@ -17,10 +13,4 @@ html * {
 
 body {
     direction: rtl;
-}
-
-.header-logo-image {
-    width: 120px;
-    height: 120px;
-    margin-right: var(--header-image-margin-right);
 }

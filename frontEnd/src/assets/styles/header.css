@@ -1,0 +1,47 @@
+:root {
+    --header-image-margin-right: 30px;
+    --header-image-margin-top-desktop-mode: -20px;
+    --header-image-margin-top-mobile-mode: -10px;
+    --header-image-margin-bottom-mobile-mode: -10px;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    background-color: rgb(204, 217, 255);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@media (min-width: 600px) {
+    .mobile-mode {
+        display: none !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .desktop-mode {
+        display: none !important;
+    }
+}
+
+.header-logo-image-desktop-mode {
+    width: 120px;
+    height: 120px;
+    margin-right: var(--header-image-margin-right);
+    margin-top: var(--header-image-margin-top-desktop-mode);
+}
+
+.header-logo-image-mobile-mode {
+    width: 80px;
+    height: 80px;
+    margin-right: var(--header-image-margin-right);
+    margin-top: var(--header-image-margin-top-mobile-mode);
+    margin-bottom: var(--header-image-margin-bottom-mobile-mode);
+}
+
+.header-buttons {
+    margin-top: -30px !important;
+    padding-right: 50px;
+    padding-left: 20px;
+}
+
