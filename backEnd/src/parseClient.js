@@ -332,7 +332,6 @@ app.get('/api/admin/user/crud/', async (req, res) => {
     // }catch(err) {console.log(err.message)}
 })
 
-/* AmirHossein */
 
 app.post('/api/admin/post/crud', async (req, res) => {
     if (!req.cookies.token) {
@@ -340,34 +339,29 @@ app.post('/api/admin/post/crud', async (req, res) => {
         res.json({"message": "You should login first"})
         console.log("No session token in post create")
     } else {
-        let user = await Parse.User.become(req.cookies.token).then(async usr => {
-            if (usr.get("username") === "admin@gmail.com") {
-                if (checkRequestLength(req, res, 2)) {
-                    res.status(400)
-                    res.json({"message": "Request Length should be 2"})
-                    console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
-                } else if (checkPostValidation(req.body.title, req.body.content)) {
-                    res.status(400)
-                    res.json({"message": "filed `title` is not valid"})
-                    console.log("Create Post Error: filed `title` is not valid")
-                } else {
-                    let Post = Parse.Object.extend('Post')
-                    let post = new Post()
-                    post.set('title', req.body.title)
-                    post.set('content', req.body.content)
-                    let acl = new Parse.ACL(usr)
-                    acl.setPublicReadAccess(true)
-                    acl.setPublicWriteAccess(false)
-                    post.setACL(acl)
-                    console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
-                    await post.save()
-                    res.status(201)
-                    res.json({"id": post.id, "creatorName": usr.get("username")})
-                }
+        await Parse.User.become(req.cookies.token).then(async user => {
+            if (!(Object.keys(req.body).length === 2)) {
+                res.status(400)
+                res.json({"message": "Request Length should be 2"})
+                console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
+            } else if (!req.body.title || !req.body.content) {
+                res.status(400)
+                res.json({"message": "filed `title` is not valid"})
+                console.log("Create Post Error: filed `title` is not valid")
             } else {
-                res.status(401)
-                res.json({"message": "You should login as admin"})
-                console.log("Non-admin attempt for post creation")
+                let Post = Parse.Object.extend('Post')
+                let post = new Post()
+                post.set('title', req.body.title)
+                post.set('content', req.body.content)
+                post.set('created_by', user)
+                let acl = new Parse.ACL(user)
+                acl.setPublicReadAccess(true)
+                acl.setPublicWriteAccess(false)
+                post.setACL(acl)
+                console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
+                await post.save()
+                res.status(201)
+                res.json({"id": post.id})
             }
         }).catch((error) => {
             res.status(401)
@@ -378,15 +372,6 @@ app.post('/api/admin/post/crud', async (req, res) => {
     }
 })
 
-function checkRequestLength(req, res, length) {
-    return !(Object.keys(req.body).length === length);
-
-}
-
-function checkPostValidation(title, content) {
-    return !title || !content;
-
-}
 
 app.get('/api/post/', async (req, res) => {
     let Post = Parse.Object.extend('Post')
@@ -398,7 +383,7 @@ app.get('/api/post/', async (req, res) => {
             "id": posts[i].id,
             "title": posts[i].get('title'),
             "content": posts[i].get('content'),
-            /* todo "created_by": posts[i].get('creator') */
+            "created_by": posts[i].get('created_by').id,
             "created_at": posts[i].createdAt
         }
         postsArray.push(post)
