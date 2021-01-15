@@ -23,7 +23,7 @@ function setCards(posts, elementsId) {
     let cards = ''
     for (let i = 0; i < posts.length; i++) {
         cards += '<div class="four wide column">' +
-            '<div class="ui raised card">' +
+            '<div class="ui raised card index-card">' +
             '<div class="content">' +
             `<div class="header">${posts[i].title}</div>` +
             `<div class="meta"><span class="category">${posts[i].created_at}</span></div>` +

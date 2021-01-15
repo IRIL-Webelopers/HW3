@@ -5,3 +5,7 @@
 .index-grid {
     padding-top: var(--index-grid-padding-top) !important;
 }
+
+.index-card {
+    background-color: rgb(204, 227, 256) !important;
+}
