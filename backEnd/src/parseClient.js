@@ -1,5 +1,6 @@
 const express = require('express')
 const Parse = require('parse/node')
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const app = express()
@@ -9,6 +10,7 @@ app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+app.use(cors())
 app.use(cookieParser())
 
 Parse.initialize('myAppId')
@@ -390,5 +392,5 @@ app.get('/api/post/', async (req, res) => {
     }
     res.status(200)
     //todo handle exception
-    res.json({"posts": postsArray})
+    res.json({"posts": postsArray.toString()})
 })
