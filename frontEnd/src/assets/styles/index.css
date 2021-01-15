@@ -1,0 +1,7 @@
+:root {
+    --index-grid-padding-top: 150px;
+}
+
+.index-grid {
+    padding-top: var(--index-grid-padding-top) !important;
+}

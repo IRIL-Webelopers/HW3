@@ -392,5 +392,5 @@ app.get('/api/post/', async (req, res) => {
     }
     res.status(200)
     //todo handle exception
-    res.json({"posts": postsArray.toString()})
+    res.json({"posts": postsArray})
 })
