@@ -3,7 +3,7 @@ async function getIndex() {
     const header = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     })
-    await fetch('http://localhost:3000/api/post', {method: "get", mode: "no-cors", headers: header})
+    await fetch('http://localhost:3000/api/post', {method: "get", headers: header})
         .then(response => response.json())
         .then(data => {
             console.log(data.status);
