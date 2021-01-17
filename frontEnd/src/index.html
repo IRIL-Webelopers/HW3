@@ -11,58 +11,62 @@
     <link href="assets/styles/index.css" rel="stylesheet">
 </head>
 
-<script src="./assets/js/index.js"></script>
-
 <body>
-<header class="text-color">
-    <!-- desktop mode -->
-    <div class="desktop-mode">
-        <img alt="WebDev Logo" class="header-logo-image-desktop-mode" src="./images/blue_logo_200x200.png">
-        <div class="ui secondary pointing menu header-buttons">
-            <div class="right menu">
+
+<div id="sidebar" class="ui vertical inverted right visible sidebar desktop-mode">
+    <p style="z-index: 3">سلام</p>
+</div>
+<div id="pusher-content">
+    <header class="text-color">
+        <!-- desktop mode -->
+        <div class="desktop-mode">
+            <img alt="WebDev Logo" class="header-logo-image-desktop-mode" src="./images/blue_logo_200x200.png">
+            <div class="ui secondary pointing menu header-buttons">
+                <div class="right menu">
+                    <a class="active item" dideo-checked="true">
+                        خانه
+                    </a>
+                    <a class="item" dideo-checked="true">
+                        برگزیده‌ها
+                    </a>
+                </div>
+                <a class="item" dideo-checked="true">
+                    ورود
+                </a>
+                <a class="item" dideo-checked="true">
+                    ثبت‌نام
+                </a>
+            </div>
+        </div>
+        <!-- mobile mode -->
+        <div class="mobile-mode">
+            <img alt="WebDev Logo" class="header-logo-image-mobile-mode" src="./images/blue_logo_200x200.png">
+        </div>
+    </header>
+    <button id="signup" style="margin-top: 200px;">button</button>
+    <div id="index-grid" class="five column doubling ui grid index-grid"></div>
+    <footer class="text-color">
+        <div class="mobile-mode">
+            <div class="ui secondary pointing menu footer-buttons">
                 <a class="active item" dideo-checked="true">
                     خانه
                 </a>
                 <a class="item" dideo-checked="true">
                     برگزیده‌ها
                 </a>
+                <a class="item" dideo-checked="true">
+                    ورود
+                </a>
+                <a class="item" dideo-checked="true">
+                    ثبت‌نام
+                </a>
             </div>
-            <a class="item" dideo-checked="true">
-                ورود
-            </a>
-            <a class="item" dideo-checked="true">
-                ثبت‌نام
-            </a>
         </div>
-    </div>
-    <!-- mobile mode -->
-    <div class="mobile-mode">
-        <img alt="WebDev Logo" class="header-logo-image-mobile-mode" src="./images/blue_logo_200x200.png">
-    </div>
-</header>
-
-<div id="index-grid" class="ui grid container index-grid"></div>
-
-<footer class="text-color">
-    <div class="mobile-mode">
-        <div class="ui secondary pointing menu footer-buttons">
-            <a class="active item" dideo-checked="true">
-                خانه
-            </a>
-            <a class="item" dideo-checked="true">
-                برگزیده‌ها
-            </a>
-            <a class="item" dideo-checked="true">
-                ورود
-            </a>
-            <a class="item" dideo-checked="true">
-                ثبت‌نام
-            </a>
-        </div>
-    </div>
-</footer>
+    </footer>
+</div>
 
 <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="./assets/js/index.js"></script>
 </body>
 </html>

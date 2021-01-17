@@ -1,11 +1,37 @@
 :root {
-    --index-grid-padding-top: 150px;
+    --sidebar-width-desktop-mode: 300px;
+}
+
+@media (min-width: 600px) {
+    :root {
+        --index-grid-padding-top: 150px;
+    }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --index-grid-padding-top: 70px;
+    }
+    #pusher-content {
+        .pusher;
+    }
 }
 
 .index-grid {
     padding-top: var(--index-grid-padding-top) !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
 }
 
 .index-card {
     background-color: rgb(204, 227, 256) !important;
 }
+
+/* Overwrites */
+
+.ui.sidebar {
+    margin-top: calc(var(--header-image-margin-top-desktop-mode) + var(--header-logo-image-height-desktop-mode) + 15px) !important;
+    background-color: #2a5473 !important;
+    width: var(--sidebar-width-desktop-mode) !important;
+}
+

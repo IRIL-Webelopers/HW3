@@ -22,7 +22,7 @@ function getIndex() {
 function setCards(posts, elementsId) {
     let cards = ''
     for (let i = 0; i < posts.length; i++) {
-        cards += '<div class="four wide column">' +
+        cards += '<div class="column">' +
             '<div class="ui raised card index-card">' +
             '<div class="content">' +
             `<div class="header">${posts[i].title}</div>` +
@@ -35,3 +35,7 @@ function setCards(posts, elementsId) {
     }
     document.getElementById(elementsId).innerHTML = cards
 }
+
+document.querySelector('#signup').addEventListener('click', function () {
+    $('#sidebar').sidebar('toggle');
+})

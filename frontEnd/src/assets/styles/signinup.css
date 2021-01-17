@@ -1,0 +1,32 @@
+:root {
+    --signinup-header-margin-top: 10px;
+    --signinup-header-margin-right: 80px;
+    --signinup-header-margin-left: 80px;
+}
+
+body {
+    background-color: rgb(204, 217, 255);
+}
+
+header {
+    margin-top: var(--signinup-header-margin-top);
+    margin-right: var(--signinup-header-margin-right);
+    margin-left: var(--signinup-header-margin-left);
+    display: flex;
+    justify-content: space-between;
+}
+
+header * {
+    color: #1D6DA7 !important;
+}
+
+.signinup-header-logo {
+    width: 120px;
+    height: 120px;
+}
+
+/* Overwrites */
+
+.ui.button {
+    background-color: transparent !important;
+}
