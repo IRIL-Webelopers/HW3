@@ -6,6 +6,9 @@
     :root {
         --index-grid-padding-top: 150px;
     }
+    .index-grid {
+        padding-right: calc(var(--sidebar-width-desktop-mode) + 20px) !important;
+    }
 }
 
 @media (max-width: 600px) {
@@ -15,12 +18,15 @@
     #pusher-content {
         .pusher;
     }
+    .index-grid {
+        padding-right: 20px !important;
+    }
 }
 
 .index-grid {
     padding-top: var(--index-grid-padding-top) !important;
-    padding-right: 20px !important;
     padding-left: 20px !important;
+    padding-bottom: 40px !important;
 }
 
 .index-card {

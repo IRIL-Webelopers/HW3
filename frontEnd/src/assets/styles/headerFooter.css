@@ -3,8 +3,8 @@
     --header-logo-image-height-desktop-mode: 120px;
     --header-image-margin-right: 30px;
     --header-image-margin-top-desktop-mode: -20px;
-    --header-image-margin-top-mobile-mode: -10px;
-    --header-image-margin-bottom-mobile-mode: -10px;
+    --header-image-margin-top-mobile-mode: 0px;
+    --header-image-margin-bottom-mobile-mode: -20px;
 }
 
 header {
