@@ -32,6 +32,7 @@
 .ui.sidebar {
     margin-top: calc(var(--header-image-margin-top-desktop-mode) + var(--header-logo-image-height-desktop-mode) + 15px) !important;
     background-color: #2a5473 !important;
+    top: auto !important;
     width: var(--sidebar-width-desktop-mode) !important;
 }
 
