@@ -1,5 +1,5 @@
 :root {
-    --sidebar-width-desktop-mode: 300px;
+    --sidebar-width-desktop-mode: 250px;
 }
 
 @media (min-width: 600px) {
