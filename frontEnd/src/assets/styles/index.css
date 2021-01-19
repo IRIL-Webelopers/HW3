@@ -6,6 +6,7 @@
     :root {
         --index-grid-padding-top: 150px;
     }
+
     .index-grid {
         padding-right: calc(var(--sidebar-width-desktop-mode) + 20px) !important;
     }
@@ -15,9 +16,7 @@
     :root {
         --index-grid-padding-top: 70px;
     }
-    #pusher-content {
-        .pusher;
-    }
+
     .index-grid {
         padding-right: 20px !important;
     }
@@ -33,12 +32,18 @@
     background-color: rgb(204, 227, 256) !important;
 }
 
+.sidebar-text-content {
+    margin-top: calc(var(--header-logo-image-height-desktop-mode) +
+    var(--header-image-margin-top-desktop-mode) + var(--header-image-margin-bottom-desktop-mode) + 60px);
+    text-align: center;
+    color: aliceblue;
+}
+
 /* Overwrites */
 
 .ui.sidebar {
-    margin-top: calc(var(--header-image-margin-top-desktop-mode) + var(--header-logo-image-height-desktop-mode) + 15px) !important;
     background-color: #2a5473 !important;
-    top: auto !important;
     width: var(--sidebar-width-desktop-mode) !important;
+    z-index: 9;
 }
 

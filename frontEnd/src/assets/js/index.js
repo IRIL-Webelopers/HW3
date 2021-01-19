@@ -1,17 +1,12 @@
-window.onload = function() {
-    getIndex()
-};
+getIndex()
 
 function getIndex() {
-    console.log("clicked")
     const header = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     })
     fetch('http://localhost:3000/api/post', {method: "get", headers: header})
         .then(response => response.json())
         .then(data => {
-            console.log(data.status);
-            console.log('Success:', data);
             setCards(data.posts, 'index-grid')
     })
         .catch((error) => {
@@ -36,6 +31,6 @@ function setCards(posts, elementsId) {
     document.getElementById(elementsId).innerHTML = cards
 }
 
-document.querySelector('#signup').addEventListener('click', function () {
-    $('#sidebar').sidebar('toggle');
+document.getElementById('sidebar-button-mobile-mode').addEventListener('click', () => {
+    $('.ui.sidebar.inverted.vertical.menu').sidebar('setting', 'transition', 'overlay').sidebar('toggle');
 })

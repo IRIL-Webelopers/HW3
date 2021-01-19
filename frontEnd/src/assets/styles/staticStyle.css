@@ -11,6 +11,10 @@ html * {
     font-family: Sahel, serif !important;
 }
 
+i.icon {
+    font-family: Icons !important;
+}
+
 body {
     direction: rtl;
 }

@@ -13,13 +13,20 @@
 
 <body>
 
-<div id="sidebar" class="ui vertical inverted right visible sidebar desktop-mode">
-    <div style="text-align: center; margin-top: 50px; color: aliceblue;">
+<div id="sidebar-desktop-mode" class="ui vertical inverted right visible sidebar desktop-mode">
+    <div class="sidebar-text-content">
         <p style="font-size: 20px;">اعضای تیم IRIL:</p>
         <p>امیرحسین هادیان</p>
         <p>امیرحسین عباسی</p>
         <p>کسری عبداللهی</p>
-        <i class="angle double right icon"></i>
+    </div>
+</div>
+<div id="sidebar-mobile-mode" class="ui sidebar inverted vertical menu mobile-mode">
+    <div class="sidebar-text-content">
+        <p style="font-size: 20px;">اعضای تیم IRIL:</p>
+        <p>امیرحسین هادیان</p>
+        <p>امیرحسین عباسی</p>
+        <p>کسری عبداللهی</p>
     </div>
 </div>
 <div id="pusher-content">
@@ -27,7 +34,7 @@
         <!-- desktop mode -->
         <div class="desktop-mode">
             <img alt="WebDev Logo" class="header-logo-image-desktop-mode" src="./images/blue_logo_200x200.png">
-            <div class="ui secondary pointing menu header-buttons">
+            <div class="ui secondary pointing menu header-buttons-desktop-mode">
                 <div class="right menu">
                     <a class="active item" dideo-checked="true">
                         خانه
@@ -45,8 +52,9 @@
             </div>
         </div>
         <!-- mobile mode -->
-        <div class="mobile-mode">
+        <div class="header-elements-mobile-mode mobile-mode">
             <img alt="WebDev Logo" class="header-logo-image-mobile-mode" src="./images/blue_logo_200x200.png">
+            <i id="sidebar-button-mobile-mode" class="large bars icon sidebar-header-button"></i>
         </div>
     </header>
     <div id="index-grid" class="four column doubling ui grid index-grid"></div>
