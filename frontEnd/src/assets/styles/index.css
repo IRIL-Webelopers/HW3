@@ -20,6 +20,11 @@
     .index-grid {
         padding-right: 20px !important;
     }
+
+    #sidebar-desktop-mode {
+        animation-name: sidebar-desktop-mode-animation;
+        animation-duration: 0.5s;
+    }
 }
 
 .index-grid {
@@ -37,6 +42,22 @@
     var(--header-image-margin-top-desktop-mode) + var(--header-image-margin-bottom-desktop-mode) + 60px);
     text-align: center;
     color: aliceblue;
+}
+
+.dark-mode-content {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 30px;
+    padding-left: 30px;
+    margin-top: 50px;
+    color: aliceblue;
+}
+
+.dark-mode-button {
+    padding: 0 !important;
+    background-color: inherit !important;
+    border: 0 !important;
+    box-shadow: 0 0 0 0 !important;
 }
 
 /* Overwrites */

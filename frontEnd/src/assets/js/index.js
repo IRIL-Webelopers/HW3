@@ -1,5 +1,3 @@
-getIndex()
-
 function getIndex() {
     const header = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -31,6 +29,16 @@ function setCards(posts, elementsId) {
     document.getElementById(elementsId).innerHTML = cards
 }
 
+getIndex()
+
 document.getElementById('sidebar-button-mobile-mode').addEventListener('click', () => {
     $('.ui.sidebar.inverted.vertical.menu').sidebar('setting', 'transition', 'overlay').sidebar('toggle');
+})
+
+document.getElementById('dark-mode-button-desktop-mode').addEventListener('click', () => {
+    nightly.toggle()
+})
+
+document.getElementById('dark-mode-button-mobile-mode').addEventListener('click', () => {
+    nightly.toggle()
 })
