@@ -17,13 +17,6 @@ Parse.initialize('myAppId')
 Parse.serverURL = 'http://localhost:1337/parse'
 Parse.User.enableUnsafeCurrentUser()
 
-// let Person = Parse.Object.extend('Person')
-
-// let person = new Person()
-// person.set('name', 'kasra')
-// person.set('age', 20)
-
-// person.save()
 
 var validateEmail = (email) => {
     let re = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])$/
@@ -33,15 +26,15 @@ var validateEmail = (email) => {
 app.post('/api/signup', async (req, res) => {
     if (!(Object.keys(req.body).length === 2 && req.body.email && req.body.password)) {
         res.status(400)
-        res.json({"message": "Request Length should be 2 with `email` and `password` parameters"})
+        res.json({ "message": "Request Length should be 2 with `email` and `password` parameters" })
         console.log("Invalid number of params")
     } else if (!validateEmail(req.body.email)) {
         res.status(400)
-        res.json({"message": "filed `email` is not valid"})
+        res.json({ "message": "filed `email` is not valid" })
         console.log("invalid email")
     } else if (req.body.password.length <= 5) {
         res.status(400)
-        res.json({"message": "filed `password`.length should be gt 5"})
+        res.json({ "message": "filed `password`.length should be gt 5" })
         console.log("password length error")
     } else {
         let User = Parse.Object.extend("User")
@@ -51,7 +44,7 @@ app.post('/api/signup', async (req, res) => {
         console.log(result)
         if (result.length) {
             res.status(409)
-            res.json({"message": "email already exist."})
+            res.json({ "message": "email already exist." })
             console.log("email exists error")
         } else {
             let user = new Parse.User()
@@ -62,47 +55,42 @@ app.post('/api/signup', async (req, res) => {
             try {
                 await user.signUp()
                 res.status(201)
-                res.json({"message": "user has been created."})
+                res.json({ "message": "user has been created." })
                 console.log("user created")
             } catch (error) {
                 res.status(500)
-                res.json({"message": "Sorry, something got F'ed up realy bad!"})
+                res.json({ "message": "Sorry, something got F'ed up realy bad!" })
                 console.log("something got F'ed up")
                 console.log("Error: " + err.code + " " + err.message);
             }
         }
     }
-    // else if (!(req.body.username && req.body.password)){
-    //     res.status(400)
-    //     res.json({"message": "Request Length should be 2"})
-    //     console.log("invalid parameter or number of parameters")
-    // }
 })
 
 app.get("/api/signin", (req, res) => {
     res.status(405)
-    res.json({"message": "Only `Post` Method is Valid"})
+    res.json({ "message": "Only `Post` Method is Valid" })
     console.log("user used Invalid method to login")
 })
 
 app.post("/api/signin", async (req, res) => {
     if (!(Object.keys(req.body).length === 2 && req.body.email && req.body.password)) {
         res.status(400)
-        res.json({"message": "Request Length should be 2 with `email` and `password` parameters"})
+        res.json({ "message": "Request Length should be 2 with `email` and `password` parameters" })
         console.log("Invalid number of params")
     } else if (!validateEmail(req.body.email)) {
         res.status(400)
-        res.json({"message": "filed `email` is not valid"})
+        res.json({ "message": "filed `email` is not valid" })
         console.log("invalid email")
     } else {
         let user = await Parse.User.logIn(req.body.email, req.body.password).then((usr) => {
             res.setHeader("Set-Cookie", `token=${usr.get("sessionToken")}; HttpOnly`)
             res.status(200)
-            res.json({"token": usr.get("sessionToken")})
+            res.json({ "token": usr.get("sessionToken") })
             console.log(`SUCCESSFUL login with user: ${usr.get("email")}`)
         }).catch((err) => {
             res.status(401)
-            res.json({"message": "invalid username or password!"})
+            res.json({ "message": "invalid username or password!" })
             console.log(`UNSUCCESSFUL login with user: ${req.body.email}`)
             console.log("Error: " + err.code + " " + err.message);
         })
@@ -113,89 +101,85 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
 
-app.put('/api/admin/post/crud', async (req, res) => {
-    try {
-        //todo kasra -> get user id
-        let userid = 'ER11UgrFgp'
-
-        if (!(Object.keys(req.body).length === 2 && req.body.title && req.body.content)) {
-            res.status(400)
-            res.json({"message": "Request Length should be 2"})
-            console.log("Invalid number of params for post update")
-        } else if (req.query.id === undefined) {
-            res.status(400)
-            res.json({"message": "url id is not valid"})
-            console.log("url id is not valid for post update")
-        }
-        // else if(){} check title validation ??!!! how?
-        else {
+app.put('/api/admin/post/crud/:id', async (req, res) => {
+    if (!req.cookies.token) {
+        res.status(401)
+        res.json({ "message": "You should login first" })
+        console.log("No session token in post read")
+    } else {
+        await Parse.User.become(req.cookies.token).then(async (usr) => {
             let Post = Parse.Object.extend("Post")
             let postQuery = new Parse.Query(Post)
-            postQuery.equalTo("objectId", req.query.id)
-            let result = await postQuery.first()
-            if (result === undefined) {
-                res.status(400)
-                res.json({"message": "url id is not valid"})
-                console.log("url id is not valid for post update")
-            } else if (result.get("createdBy").id !== userid) {
+            postQuery.equalTo("objectId", req.params.id)
+            await postQuery.first().then(async (result) => {
+                if(result){
+                    if (!(Object.keys(req.body).length === 2)) {
+                        res.status(400)
+                        res.json({ "message": "Request Length should be 2" })
+                        console.log(`Update Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
+                    } else if (!req.body.title || !req.body.content) {
+                        res.status(400)
+                        res.json({ "message": "filed `title` or `content` is not valid" })
+                        console.log("Update Post Post Error: filed `title` or `content` is not valid")
+                    } else {
+                        result.set('title', req.body.title)
+                        result.set('content', req.body.content)
+                        await result.save()
+                        res.sendStatus(204)
+                        console.log("post update successful")
+                    }
+                }else{
+                    res.status(400)
+                    res.json({ "message": "url id is not valid" })
+                    console.log("Invalid url id for post update")
+                }
+            }).catch((err) => {
                 res.status(401)
-                res.json({"message": "permission denied."})
+                res.json({ "message": "permission denied." })
                 console.log("permission denied for post update")
-            } else {
-                result.set('title', req.body.title)
-                result.set('content', req.body.content)
-                await result.save()
-                res.status(204)
-                console.log("post update successful")
-            }
-        }
-    } catch (err) {
-        console.log(err.message)
+                console.log("Error: " + err.code + "[*]" + err.message)
+            })
+        }).catch(error => {
+            res.status(401)
+            res.json({ "message": "You should login first" })
+            console.log("Invalid session token")
+            console.log("Error: " + error.code + "[*]" + error.message);
+        })
     }
 })
 
-app.delete('/admin/post/crud/:id', async (req, res) => {
-    //check if 204 is sent
-    try {
-        //todo kasra -> get user id
-        if (!req.cookies.token) {
-            res.status(401)
-            res.json({"message": "You should login first"})
-            console.log("No session token in post read")
-        } else {
-            let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
-                if (usr.get("username") === "admin@gmail.com") {
-                    let Post = Parse.Object.extend("Post")
-                    let postQuery = new Parse.Query(Post)
-                    postQuery.equalTo("objectId", req.params.id)
-                    let result = await postQuery.first()
-                    if (result === undefined) {
-                        res.status(400)
-                        res.json({"message": "url id is not valid"})
-                        console.log("Invalid url id for post delete")
-                    } else if (result.get('createdBy').id !== userid) {
-                        res.status(401)
-                        res.json({"message": "permission denied."})
-                        console.log("permission denied for post delete")
-                    } else {
-                        await result.destroy()
-                        res.status(204)
-                        console.log("post delete successful")
-                    }
-                } else {
+app.delete('/api/admin/post/crud/:id', async (req, res) => {
+    if (!req.cookies.token) {
+        res.status(401)
+        res.json({ "message": "You should login first" })
+        console.log("No session token in post read")
+    } else {
+        await Parse.User.become(req.cookies.token).then(async (usr) => {
+            let Post = Parse.Object.extend("Post")
+            let postQuery = new Parse.Query(Post)
+            postQuery.equalTo("objectId", req.params.id)
+            await postQuery.first().then(async (result) => {
+                await result.destroy().then(() => {
+                    res.sendStatus(204)
+                    console.log("post delete successful")
+                }).catch((err) => {
                     res.status(401)
-                    res.json({"message": "You should login as admin"})
-                    console.log("Non-admin attempt for post deletion")
-                }
-            }).catch(error => {
-                res.status(401)
-                res.json({"message": "permission denied."})
-                console.log("Invalid user token in user info read")
-                console.log("Error: " + error.code + "[*]" + error.message);
+                    res.json({ "message": "permission denied." })
+                    console.log("permission denied for deleting another user post")
+                    console.log("Error: " + err.code + "[*]" + err.message)
+                })
+            }).catch((err) => {
+                res.status(400)
+                res.json({ "message": "url id is not valid" })
+                console.log("Invalid url id for post delete")
+                console.log("Error: " + err.code + "[*]" + err.message)
             })
-        }
-    } catch (err) {
-        console.log(err.message)
+        }).catch(error => {
+            res.status(401)
+            res.json({ "message": "You should login first" })
+            console.log("Invalid session token")
+            console.log("Error: " + error.code + "[*]" + error.message);
+        })
     }
 })
 
@@ -203,37 +187,36 @@ app.delete('/admin/post/crud/:id', async (req, res) => {
 app.get('/api/admin/post/crud/:id', async (req, res) => {
     if (!req.cookies.token) {
         res.status(401)
-        res.json({"message": "You should login first"})
+        res.json({ "message": "You should login first" })
         console.log("No session token in post read")
     } else {
-        let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
-            if (usr.get("username") === "admin@gmail.com") {
-                let Post = Parse.Object.extend("Post")
-                let postQuery = new Parse.Query(Post)
-                postQuery.equalTo("objectId", req.params.id)
-                let result = await postQuery.first()
-                if (result === undefined) {
-                    res.status(400)
-                    res.json({"message": "url id is not valid"})
-                    console.log("Invalid url id for post read")
-                } else {
-                    res.status(200)
-                    res.json({
-                        "post": {
-                            "id": result.id,
-                            "title": result.get('title'),
-                            "content": result.get('content'),
-                            "created_by": result.get('createdBy').id,
-                            "created_at": result.createdAt
-                        }
-                    })
-                    console.log("post read successful")
-                }
-            } else {
-                res.status(401)
-                res.json({"message": "You should login as admin"})
-                console.log("Non-admin attempt for getting specific post")
-            }
+        let user = await Parse.User.become(req.cookies.token).then(async () => {
+            let Post = Parse.Object.extend("Post")
+            let postQuery = new Parse.Query(Post)
+            postQuery.equalTo("objectId", req.params.id)
+            await postQuery.first().then(async (result) => {
+                res.status(200)
+                res.json({
+                    "post": {
+                        "id": result.id,
+                        "title": result.get('title'),
+                        "content": result.get('content'),
+                        "created_by": result.get('created_by').id,
+                        "created_at": result.createdAt
+                    }
+                })
+                console.log("post read successful")
+            }).catch((err) => {
+                res.status(400)
+                res.json({ "message": "url id is not valid" })
+                console.log("Invalid url id for post read")
+                console.log("Error: " + err.code + "[*]" + err.message)
+            })
+        }).catch((error) => {
+            res.status(401)
+            res.json({ "message": "You should login first" })
+            console.log("Invalid session token")
+            console.log("Error: " + error.code + "[*]" + error.message);
         })
     }
 })
@@ -241,13 +224,13 @@ app.get('/api/admin/post/crud/:id', async (req, res) => {
 app.get('/api/admin/post/crud', async (req, res) => {
     if (!req.cookies.token) {
         res.status(401)
-        res.json({"message": "You should login first"})
+        res.json({ "message": "You should login first" })
         console.log("No session token in post read")
     } else {
         let user = await Parse.User.become(req.cookies.token).then(async (usr) => {
             let Post = Parse.Object.extend("Post")
             let postQuery = new Parse.Query(Post)
-            postQuery.equalTo('createdBy', userid)
+            postQuery.equalTo('created_by', usr)
             let posts = await postQuery.find()
             let result = []
             for (let i = 0; i < posts.length; i++) {
@@ -255,7 +238,7 @@ app.get('/api/admin/post/crud', async (req, res) => {
                     "id": posts[i].id,
                     "title": posts[i].get('title'),
                     "content": posts[i].get('content'),
-                    "created_by": posts[i].get('createdBy').id,
+                    "created_by": posts[i].get('created_by').id,
                     "created_at": posts[i].get("createdAt"),
                 })
             }
@@ -266,18 +249,17 @@ app.get('/api/admin/post/crud', async (req, res) => {
             console.log("post read successful")
         }).catch(error => {
             res.status(401)
-            res.json({"message": "permission denied."})
-            console.log("Invalid user token in user info read")
+            res.json({ "message": "You should login first" })
+            console.log("Invalid session token")
             console.log("Error: " + error.code + "[*]" + error.message);
         })
     }
 })
 
 app.get('/api/admin/user/crud/', async (req, res) => {
-    //get email is not working properly
     if (!req.cookies.token) {
         res.status(401)
-        res.json({"message": "You should login first"})
+        res.json({ "message": "You should login first" })
         console.log("No session token in user info read")
     } else {
         let user = await Parse.User.become(req.cookies.token).then((usr) => {
@@ -287,69 +269,33 @@ app.get('/api/admin/user/crud/', async (req, res) => {
                     "id": usr.id,
                     "email": usr.get('email'),
                     "created_at": usr.get("createdAt"),
-                    "username": usr.get('username')
                 }
             })
         }).catch((error) => {
             res.status(401)
-            res.json({"message": "permission denied."})
+            res.json({ "message": "permission denied." })
             console.log("Invalid user token in user info read")
             console.log("Error: " + error.code + "[*]" + error.message);
         })
     }
-    // try{
-    // //todo kasra -> get user id
-    // let userid = 'ER11UgrFgp'
-
-    // if(req.params.id === undefined) {
-    //     res.status(400)
-    //     res.json({"message": "url id is not valid"})
-    //     console.log("Invalid url for user read")
-    // } else if(req.query.id !== userid) {
-    //     res.status(401)
-    //     res.json({"message": "permission denied."})
-    //     console.log("permission denied for user read")
-    // } else {
-    //     let User = Parse.Object.extend("User")
-    //     let userQuery = new Parse.Query(User)
-    //     userQuery.equalTo("objectId", req.query.id)
-    //     let result = await userQuery.first()
-    //     if(result === undefined) {
-    //         es.status(400)
-    //         res.json({"message": "url id is not valid"})
-    //         console.log("Invalid url id for user read")
-    //     } else {
-    //         res.status(200)
-    //     res.json({
-    //         "user": {
-    //             "id": result.id,
-    //             "email": result.get('email'),
-    //             "created_at": result.createdAt,
-    //             "username": result.get('username')
-    //           }
-    //     })
-    //     console.log("user read successful")
-    //     }
-    // }
-    // }catch(err) {console.log(err.message)}
 })
 
 
 app.post('/api/admin/post/crud', async (req, res) => {
     if (!req.cookies.token) {
         res.status(401)
-        res.json({"message": "You should login first"})
+        res.json({ "message": "You should login first" })
         console.log("No session token in post create")
     } else {
         await Parse.User.become(req.cookies.token).then(async user => {
             if (!(Object.keys(req.body).length === 2)) {
                 res.status(400)
-                res.json({"message": "Request Length should be 2"})
+                res.json({ "message": "Request Length should be 2" })
                 console.log(`Create Post Error: Request Length should be 2 but it's: ${Object.keys(req.body).length}`)
             } else if (!req.body.title || !req.body.content) {
                 res.status(400)
-                res.json({"message": "filed `title` is not valid"})
-                console.log("Create Post Error: filed `title` is not valid")
+                res.json({ "message": "filed `title` or `content` is not valid" })
+                console.log("Create Post Error: filed `title` or `content` is not valid")
             } else {
                 let Post = Parse.Object.extend('Post')
                 let post = new Post()
@@ -363,11 +309,11 @@ app.post('/api/admin/post/crud', async (req, res) => {
                 console.log(`Post with title: ${req.body.title}, content: ${req.body.content} created.`)
                 await post.save()
                 res.status(201)
-                res.json({"id": post.id})
+                res.json({ "id": post.id })
             }
         }).catch((error) => {
             res.status(401)
-            res.json({"message": "You should login first"})
+            res.json({ "message": "You should login first" })
             console.log("Invalid session token")
             console.log("Error: " + error.code + "[*]" + error.message);
         })
@@ -392,5 +338,5 @@ app.get('/api/post/', async (req, res) => {
     }
     res.status(200)
     //todo handle exception
-    res.json({"posts": postsArray})
+    res.json({ "posts": postsArray })
 })
