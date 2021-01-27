@@ -64,7 +64,7 @@ footer {
     right: 0;
     position: fixed;
     background-color: rgb(204, 217, 255);
-    /* todo box shadow */
+    box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.2), 0 -6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .footer-buttons {
@@ -81,8 +81,4 @@ footer {
 .ui.secondary.pointing.menu.footer-buttons::after {
     /* added for debug, ::after cause bug in footer buttons location */
     display: none;
-}
-
-.ui.animated.button.transparent {
-    background-color: transparent;
 }

@@ -1,0 +1,23 @@
+.dark-mode {
+    background-color: #282a36 !important;
+}
+
+.dark-mode header {
+    background-color: #44475a;
+}
+
+.dark-mode footer {
+    background-color: #44475a;
+}
+
+.dark-mode .ui.sidebar {
+    background-color: #3c4f65 !important;
+}
+
+.dark-mode .text-color * {
+    color: aliceblue !important;
+}
+
+.dark-mode .index-card {
+    background-color: #557174 !important;
+}

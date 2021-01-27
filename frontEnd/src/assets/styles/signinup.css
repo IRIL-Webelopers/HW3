@@ -2,10 +2,13 @@
     --signinup-header-margin-top: 10px;
     --signinup-header-margin-right: 80px;
     --signinup-header-margin-left: 80px;
+    --signinup-width: 340px;
+    --signinup-height: 360px;
 }
 
 body {
     background-color: rgb(204, 217, 255);
+    overflow-x: auto;
 }
 
 header {
@@ -25,8 +28,35 @@ header * {
     height: 120px;
 }
 
+.main-box {
+    max-width: 1000px;
+    display: flex;
+    margin: 10px auto;
+    padding-bottom: 40px;
+    justify-content: center;
+}
+
+.signinup-box {
+    width: var(--signinup-width);
+}
+
+.inside-signinup-box {
+    height: var(--signinup-height);
+}
+
+.engagement-image {
+    height: var(--signinup-height);
+    width: auto;
+    margin-top: 43px;
+}
+
+.tab {
+    width: calc(var(--signinup-width) / 2);
+    justify-content: center;
+}
+
 /* Overwrites */
 
-.ui.button {
+header .ui.button {
     background-color: transparent !important;
 }
