@@ -30,7 +30,7 @@ let signup = () => {
             body: formBody
         })
         .then(response => {
-            if(!response.ok){
+            if (!response.ok) {
                 // console.log("about to throw error")
                 // console.log(response.body)
                 // console.log(response.text())
@@ -65,6 +65,73 @@ let signup = () => {
             toastMessage[0].innerText = "Please Try Again"
         })
 }
+
+let signin = () => {
+    let email = document.getElementById("signin-email-input-id").value
+    let password = document.getElementById("signin-password-input-id").value
+    let formBody = []
+    formBody.push("email=" + encodeURIComponent(email))
+    formBody.push("password=" + encodeURIComponent(password))
+    formBody = formBody.join("&")
+    fetch("http://localhost:3000/api/signin",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+            body: formBody
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response.json()['message']);
+            }
+            return response.json()
+        })
+        .then(data => {
+            console.log("data success")
+            console.log(data)
+            // setCookie("token", data.token, 30)
+            // console.log(getCookie("token"))
+            window.open("userinfo.html", '_self');
+        })
+        .catch(error => {
+            let toast = $('.message')
+            toast.removeClass("positive")
+            toast.addClass("negative")
+            toast.removeClass("hidden")
+            // toast.transition()
+            console.log(error)
+            let toastHeader = $('#toast-header')
+            // console.log(toastHeader[0].innerHTML)
+            toastHeader[0].innerText = "An Error Occured"
+            let toastMessage = $('#toast-message')
+            toastMessage[0].innerText = "Please Try Again"
+        })
+}
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    console.log("cookie created")
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 
 document.getElementById('signin-id').addEventListener('click', () => {
     document.getElementById('signin-box-id').classList.add('active')

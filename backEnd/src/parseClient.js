@@ -83,7 +83,8 @@ app.post("/api/signin", async (req, res) => {
         console.log("invalid email")
     } else {
         let user = await Parse.User.logIn(req.body.email, req.body.password).then((usr) => {
-            res.setHeader("Set-Cookie", `token=${usr.get("sessionToken")}; HttpOnly`)
+            // res.setHeader("Set-Cookie", `token=${usr.get("sessionToken")}; HttpOnly`)
+            res.cookie('token',usr.get("sessionToken"), { maxAge: 900000, httpOnly: true });
             res.status(200)
             res.json({ "token": usr.get("sessionToken") })
             console.log(`SUCCESSFUL login with user: ${usr.get("email")}`)
