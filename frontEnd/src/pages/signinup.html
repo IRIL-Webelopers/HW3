@@ -1,88 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>WebDev</title>
-    <link href="../images/blue_favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
-    <link href="../images/blue_favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+    <link href="../images/blue_favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
+    <link href="../images/blue_favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
     <link href="../assets/styles/staticStyle.css" rel="stylesheet">
     <link href="../assets/styles/signinup.css" rel="stylesheet">
 </head>
+
 <body>
-<header>
-    <img id="signinup-logo" src="../images/blue_logo_200x200.png" alt="WebDev Logo" class="signinup-header-logo">
-    <button id="return-home-id" class="ui button">بازگشت به خانه</button>
-</header>
-<div class="main-box">
-    <div class="signinup-box">
-        <div class="ui top attached tabular menu">
-            <a id="signin-id" class="item tab active" data-tab="second" dideo-checked="true">ورود</a>
-            <a id="signup-id" class="item tab" data-tab="first" dideo-checked="true">ثبت‌نام</a>
-        </div>
-        <div id="signin-box-id" class="ui bottom attached tab segment inside-signinup-box inside-signin-box active" data-tab="signin">
-            <div style="margin-top: 20px; margin-bottom: 30px" class="ui vertical steps">
-                <div class="step">
-                    <i class="hand peace icon"></i>
-                    <div class="content">
-                        <div class="title">کاربر گرامی سایت خوش‌آمدید.</div>
-                    </div>
-                </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <header>
+        <img id="signinup-logo" src="../images/blue_logo_200x200.png" alt="WebDev Logo" class="signinup-header-logo">
+        <button id="return-home-id" class="ui button">بازگشت به خانه</button>
+    </header>
+    <div class="main-box">
+        <div class="signinup-box">
+            <div class="ui top attached tabular menu">
+                <a id="signin-id" class="item tab active" data-tab="second" dideo-checked="true">ورود</a>
+                <a id="signup-id" class="item tab" data-tab="first" dideo-checked="true">ثبت‌نام</a>
             </div>
-            <div class="ui form">
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>ایمیل:</label>
-                        <input id="signin-email-input-id" name="email-input" style="direction: ltr;" type="email" placeholder="For example: amir@gmail.com">
+            <div id="signin-box-id" class="ui bottom attached tab segment inside-signinup-box inside-signin-box active"
+                data-tab="signin">
+                <div style="margin-top: 20px; margin-bottom: 30px" class="ui vertical steps">
+                    <div class="step">
+                        <i class="hand peace icon"></i>
+                        <div class="content">
+                            <div class="title">کاربر گرامی سایت خوش‌آمدید.</div>
+                        </div>
                     </div>
                 </div>
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>رمز عبور:</label>
-                        <input id="signin-password-input-id" style="direction: ltr;" type="password" placeholder="Your Password">
+                <div class="ui form">
+                    <div class="equal width fields">
+                        <div class="field">
+                            <label>ایمیل:</label>
+                            <input id="signin-email-input-id" name="email-input" style="direction: ltr;" type="email"
+                                placeholder="For example: amir@gmail.com">
+                        </div>
                     </div>
-                </div>
+                    <div class="equal width fields">
+                        <div class="field">
+                            <label>رمز عبور:</label>
+                            <input id="signin-password-input-id" style="direction: ltr;" type="password"
+                                placeholder="Your Password">
+                        </div>
+                    </div>
 
-                <div style="margin-top: 30px">
-                    <button id="signin-button-id" class="fluid ui primary button" type="submit" disabled>ورود</button>
+                    <div style="margin-top: 30px">
+                        <button id="signin-button-id" class="fluid ui primary button" type="submit"
+                            disabled>ورود</button>
+                    </div>
+                </div>
+            </div>
+            <div id="signup-box-id" class="ui bottom attached tab segment inside-signinup-box" data-tab="signup">
+                <div class="ui form">
+                    <div class="equal width fields">
+                        <div class="field">
+                            <label>ایمیل:</label>
+                            <input id="signup-email-input-id" name="email-input" style="direction: ltr;" type="email"
+                                placeholder="For example: amir@gmail.com">
+                        </div>
+                    </div>
+                    <div class="equal width fields">
+                        <div class="field">
+                            <label>رمز عبور:</label>
+                            <input id="signup-password-input-id" style="direction: ltr;" type="password"
+                                placeholder="Your Password">
+                        </div>
+                    </div>
+                    <div class="equal width fields">
+                        <div class="field">
+                            <label>تکرار رمز عبور:</label>
+                            <input id="repeated-password-input-id" style="direction: ltr;" type="password"
+                                placeholder="Confirm">
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px" class="ui checkbox">
+                        <input id="rules-acceptation-id" type="checkbox" name="Accept Rules">
+                        <label>قوانین و مقررات سایت WebDev را می‌پذیرم.</label>
+                    </div>
+                    <div style="margin-top: 30px">
+                        <button id="signup-button-id" class="fluid ui primary button" type="submit" onclick="signup()"
+                            disabled>ثبت‌نام</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="signup-box-id" class="ui bottom attached tab segment inside-signinup-box" data-tab="signup">
-            <div class="ui form">
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>ایمیل:</label>
-                        <input id="signup-email-input-id" name="email-input" style="direction: ltr;" type="email" placeholder="For example: amir@gmail.com">
-                    </div>
-                </div>
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>رمز عبور:</label>
-                        <input id="signup-password-input-id" style="direction: ltr;" type="password" placeholder="Your Password">
-                    </div>
-                </div>
-                <div class="equal width fields">
-                    <div class="field">
-                        <label>تکرار رمز عبور:</label>
-                        <input id="repeated-password-input-id" style="direction: ltr;" type="password" placeholder="Confirm">
-                    </div>
-                </div>
-                <div style="margin-top: 10px" class="ui checkbox">
-                    <input id="rules-acceptation-id" type="checkbox" name="Accept Rules">
-                    <label>قوانین و مقررات سایت WebDev را می‌پذیرم.</label>
-                </div>
-                <div style="margin-top: 30px">
-                    <button id="signup-button-id" class="fluid ui primary button" type="submit" disabled>ثبت‌نام</button>
-                </div>
+        <div class="desktop-mode">
+            <img class="engagement-image" src="../images/signinup.jpg" alt="Sign in and Sign up Image">
+        </div>
+        <script src="signinup.js"></script>
+    </div>
+    <footer style="display: flex; direction: ltr;">
+        <div class="ui positive message transition hidden">
+            <i class="close icon"></i>
+            <div id="toast-header" class="header">
+                You are eligible for a reward
+            </div>
+            <div id="toast-message">
+                <p>Go to your <b>special offers</b> page to see now.</p>
             </div>
         </div>
-    </div>
-    <div class="desktop-mode">
-        <img class="engagement-image" src="../images/signinup.jpg" alt="Sign in and Sign up Image">
-    </div>
-</div>
+    </footer>
 
-<script type="module" src="../assets/js/signinup.js"></script>
+    <script type="module" src="../assets/js/signinup.js"></script>
 </body>
+
 </html>
